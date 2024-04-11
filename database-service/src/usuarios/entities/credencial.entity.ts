@@ -8,9 +8,7 @@ export class Credencial {
     @Column({ length: 150, unique: true })
     username: string;
     @Column({ length: 150 })
-    password: string;
-    @Column({ length: 11, unique: true })
-    telefone: string;
+    senha: string;
     @OneToOne(() => Usuario, (usuario) => usuario.credenciais)
     usuario: Usuario;
     @Column({ default: 0 })

@@ -6,16 +6,22 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Controller()
 export class UsuariosController {
-  constructor(private readonly usuariosService: UsuariosService) {}
+  constructor(private readonly usuariosService: UsuariosService) { }
 
   @MessagePattern('createUsuario')
   create(@Payload() createUsuarioDto: CreateUsuarioDto) {
+    console.log(createUsuarioDto)
     return this.usuariosService.create(createUsuarioDto);
   }
 
   @MessagePattern('findAllUsuarios')
   findAll() {
     return this.usuariosService.findAll();
+  }
+
+  @MessagePattern('findbyUsername')
+  findbyUsername(@Payload() username: string) {
+    return this.usuariosService.findbyUsername(username);
   }
 
   @MessagePattern('findOneUsuario')
