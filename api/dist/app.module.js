@@ -13,7 +13,15 @@ const app_service_1 = require("./app.service");
 const usuario_module_1 = require("./usuario/usuario.module");
 const config_1 = require("@nestjs/config");
 const rmq_client_module_1 = require("./rmq-client/rmq-client.module");
+const auth_middleware_1 = require("./auth/auth.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer
+            .apply(auth_middleware_1.AuthMiddleware)
+            .exclude({ path: '/usuario', method: common_1.RequestMethod.POST })
+            .exclude({ path: '/usuario/login', method: common_1.RequestMethod.POST })
+            .forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([

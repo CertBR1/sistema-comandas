@@ -12,4 +12,9 @@ export class AuthController {
   login(@Payload() data: CreateAuthDto) {
     return this.authService.login(data);
   }
+
+  @MessagePattern('decodeToken')
+  decodeToken(@Payload() data: string) {
+    return this.authService.decodeToken(data);
+  }
 }

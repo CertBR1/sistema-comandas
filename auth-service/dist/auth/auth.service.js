@@ -36,10 +36,20 @@ let AuthService = class AuthService {
             if (!isPasswordValid) {
                 throw new microservices_1.RpcException('Usuário ou senha inválidos');
             }
-            const payload = { username: response.username, sub: response.id };
+            const payload = { name: response.nome, username: response.username, role: response.nivel_acesso, sub: response.id };
             return {
                 access_token: this.jwtService.sign(payload),
             };
+        }
+        catch (error) {
+            console.log(error);
+            throw new microservices_1.RpcException(error);
+        }
+    }
+    async decodeToken(data) {
+        try {
+            const payload = await this.jwtService.decode(data);
+            return payload;
         }
         catch (error) {
             console.log(error);

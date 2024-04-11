@@ -34,10 +34,8 @@ let UsuarioService = class UsuarioService {
     }
     async create(createUsuarioDto) {
         try {
-            console.log(createUsuarioDto);
             const responseObsv = this.databaseService.send('createUsuario', createUsuarioDto);
             const response = await (0, rxjs_1.firstValueFrom)(responseObsv);
-            console.log(response);
             return response;
         }
         catch (error) {

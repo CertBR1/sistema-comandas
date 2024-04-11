@@ -6,4 +6,5 @@ export declare class AuthController {
     login(data: CreateAuthDto): Promise<{
         access_token: string;
     }>;
+    decodeToken(data: string): Promise<any>;
 }

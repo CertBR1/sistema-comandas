@@ -24,6 +24,9 @@ let AuthController = class AuthController {
     login(data) {
         return this.authService.login(data);
     }
+    decodeToken(data) {
+        return this.authService.decodeToken(data);
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -33,6 +36,13 @@ __decorate([
     __metadata("design:paramtypes", [create_auth_dto_1.CreateAuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, microservices_1.MessagePattern)('decodeToken'),
+    __param(0, (0, microservices_1.Payload)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "decodeToken", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

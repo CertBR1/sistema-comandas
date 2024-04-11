@@ -25,11 +25,9 @@ export class UsuarioService {
   }
   async create(createUsuarioDto: CreateUsuarioDto) {
     try {
-      console.log(createUsuarioDto)
       const responseObsv = this.databaseService.send('createUsuario', createUsuarioDto);
       const response = await firstValueFrom(responseObsv);
-      console.log(response)
-      return response
+      return response;
     } catch (error) {
       console.log(error);
       throw new HttpException(error, 500);

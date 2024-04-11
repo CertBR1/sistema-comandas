@@ -8,4 +8,5 @@ export declare class AuthService {
     login(data: CreateAuthDto): Promise<{
         access_token: string;
     }>;
+    decodeToken(data: string): Promise<any>;
 }
