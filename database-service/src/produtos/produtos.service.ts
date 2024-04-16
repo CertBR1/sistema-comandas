@@ -44,18 +44,50 @@ export class ProdutosService {
   }
 
   findAll() {
-    return `This action returns all produtos`;
+    try {
+      return this.produtosRepository.find({
+        relations: {
+          categoria: true,
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      throw new RpcException(error);
+    }
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} produto`;
+    try {
+      return this.produtosRepository.findOneBy({ id });
+    } catch (error) {
+      console.log(error);
+      throw new RpcException(error);
+    }
+  }
+
+  findByCategoria(categoryId: number) {
+    try {
+      return this.produtosRepository.find({
+        where: {
+          categoria: {
+            id: categoryId
+          }
+        },
+        relations: {
+          categoria: true
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      throw new RpcException(error);
+    }
   }
 
   update(id: number, updateProdutoDto: UpdateProdutoDto) {
-    return `This action updates a #${id} produto`;
+    throw new RpcException('Update not implemented');
   }
 
   remove(id: number) {
-    return `This action removes a #${id} produto`;
+    throw new RpcException(`Delete not implemented`);
   }
 }
