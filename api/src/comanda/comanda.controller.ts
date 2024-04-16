@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ComandaService } from './comanda.service';
 import { CreateComandaDto } from './dto/create-comanda.dto';
 import { UpdateComandaDto } from './dto/update-comanda.dto';
+import { CreateDepositoDto } from './dto/create-deposito.dto';
 
 @Controller('comanda')
 export class ComandaController {
-  constructor(private readonly comandaService: ComandaService) {}
+  constructor(private readonly comandaService: ComandaService) { }
 
   @Post()
   create(@Body() createComandaDto: CreateComandaDto) {
@@ -19,7 +20,12 @@ export class ComandaController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.comandaService.findOne(+id);
+    return this.comandaService.findOne(id);
+  }
+
+  @Post(':id')
+  deposit(@Param('id') id: string, @Body() createDepositoDto: CreateDepositoDto) {
+    return this.comandaService.deposit(createDepositoDto, id);
   }
 
   @Patch(':id')

@@ -11,17 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateAuthDto = void 0;
 const class_validator_1 = require("class-validator");
+class Credenciais {
+}
 class CreateAuthDto {
 }
 exports.CreateAuthDto = CreateAuthDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'Username é obrigatorio' }),
-    (0, class_validator_1.IsString)({ message: 'Username deve ser uma string' }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "username", void 0);
+    (0, class_validator_1.IsNotEmpty)({ message: 'Nenhuma das credenciais pode ser vazia' }),
+    __metadata("design:type", Credenciais)
+], CreateAuthDto.prototype, "credenciaisDigitadas", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'Senha é obrigatorio' }),
-    (0, class_validator_1.IsString)({ message: 'Senha deve ser uma string' }),
-    __metadata("design:type", String)
-], CreateAuthDto.prototype, "senha", void 0);
+    (0, class_validator_1.IsNotEmpty)({ message: 'Nenhuma das credenciais pode ser vazia' }),
+    __metadata("design:type", Credenciais)
+], CreateAuthDto.prototype, "credenciaisBancoDeDados", void 0);
 //# sourceMappingURL=create-auth.dto.js.map

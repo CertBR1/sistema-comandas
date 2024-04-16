@@ -14,12 +14,12 @@ const usuario_module_1 = require("./usuario/usuario.module");
 const config_1 = require("@nestjs/config");
 const rmq_client_module_1 = require("./rmq-client/rmq-client.module");
 const auth_middleware_1 = require("./auth/auth.middleware");
+const comanda_module_1 = require("./comanda/comanda.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
             .apply(auth_middleware_1.AuthMiddleware)
-            .exclude({ path: '/usuario', method: common_1.RequestMethod.POST })
-            .exclude({ path: '/usuario/login', method: common_1.RequestMethod.POST })
+            .exclude({ path: '/usuario', method: common_1.RequestMethod.POST }, { path: '/usuario/login', method: common_1.RequestMethod.POST })
             .forRoutes('*');
     }
 };
@@ -31,7 +31,8 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true
             }),
             usuario_module_1.UsuarioModule,
-            rmq_client_module_1.RmqClientModule
+            rmq_client_module_1.RmqClientModule,
+            comanda_module_1.ComandaModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

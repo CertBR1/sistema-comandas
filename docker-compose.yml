@@ -11,6 +11,7 @@ services:
       - 5432
     networks:
       - default
+
   rabbitmq-service:
     image: rabbitmq
     environment:
@@ -20,30 +21,33 @@ services:
       - "5672:5672"
     networks:
       - default
+
   database-sevice:
     build: ./database-service
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: database
+      POSTGRES_HOST: postgres-service
       RMQ_DATABASE_QUEUE: ${RMQ_DATABASE_QUEUE}
-      RMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
+      RMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq-service:5672
     depends_on:
-      - database
+      - postgres-service
+      - rabbitmq-service
     networks:
       - default
-  comanda-service:
-    build: ./comanda-service
-    environment:
-      RMQ_COMANDA_QUEUE: ${RMQ_COMANDA_QUEUE}
-      RMQ_DATABASE_QUEUE: ${RMQ_DATABASE_QUEUE}
-      RMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
-    depends_on:
-      - rabbitmq
-      - database-sevice
-    networks:
-      - default
+
+  #auth-service:
+   # build: ./auth-service
+    #environment:
+     # RMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq-service:5672
+     # RMQ_AUTH_QUEUE: ${RMQ_AUTH_QUEUE}
+      #RMQ_DATABASE_QUEUE: ${RMQ_DATABASE_QUEUE}
+    #depends_on:
+     # - database-sevice
+    #networks:
+     # - default
+
 networks: 
   default:
     driver: bridge

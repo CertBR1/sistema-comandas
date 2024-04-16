@@ -4,6 +4,9 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const microservices_1 = require("@nestjs/microservices");
 async function bootstrap() {
+    console.log(process.env.RMQ_URL);
+    console.log(process.env.RMQ_AUTH_QUEUE);
+    console.log(process.env.RMQ_DATABASE_QUEUE);
     const app = await core_1.NestFactory.createMicroservice(app_module_1.AppModule, {
         transport: microservices_1.Transport.RMQ,
         options: {

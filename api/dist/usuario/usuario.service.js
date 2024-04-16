@@ -23,17 +23,22 @@ let UsuarioService = class UsuarioService {
     }
     async login(credenciais) {
         try {
-            const responseObsv = this.authService.send('login', credenciais);
-            const response = await (0, rxjs_1.firstValueFrom)(responseObsv);
-            console.log(response);
-            return response;
+            console.log('antes do send', credenciais);
+            const userObsv = this.databaseService.send('findbyUsername', credenciais.username);
+            const user = await (0, rxjs_1.firstValueFrom)(userObsv);
+            console.log('depois do send', user);
+            if (user) {
+                const responseObsv = this.authService.send('login', { credenciais, user });
+                const response = await (0, rxjs_1.firstValueFrom)(responseObsv);
+                return response;
+            }
         }
         catch (error) {
-            console.log(error);
-            if (error.error === 'Usuário ou senha inválidos') {
-                throw new common_1.HttpException('Usuário ou senha inválidos', 401);
+            console.log('LOGIN', error);
+            if (error.error === 'Usuário ou senha inválidos' || error.error === 'Credenciais inválidas') {
+                throw new common_1.HttpException('Usuário ou senha inválidos', common_1.HttpStatus.UNAUTHORIZED);
             }
-            throw new common_1.HttpException(error, 500);
+            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async create(createUsuarioDto) {
@@ -44,7 +49,7 @@ let UsuarioService = class UsuarioService {
         }
         catch (error) {
             console.log(error);
-            throw new common_1.HttpException(error, 500);
+            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     findAll() {

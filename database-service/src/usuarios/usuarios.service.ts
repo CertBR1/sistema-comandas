@@ -33,13 +33,15 @@ export class UsuariosService {
   }
 
   findAll() {
+    console.log('find all');
+
     throw new RpcException('Method not implemented.');
   }
 
   async findbyUsername(username: string) {
     console.log(username);
     const user = await this.credenciaisRepository.findOne({ where: { username }, relations: { usuario: true } });
-    console.log(user);
+    console.log('USER', user);
     return user;
   }
 

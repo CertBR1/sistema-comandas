@@ -16,7 +16,6 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
 const jwt_1 = require("@nestjs/jwt");
-const rxjs_1 = require("rxjs");
 const argon = require("argon2");
 let AuthService = class AuthService {
     constructor(databaseService, jwtService) {
@@ -24,22 +23,16 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async login(data) {
-        console.log(data);
         try {
-            const responseObsv = this.databaseService.send('findbyUsername', data.username);
-            const response = await (0, rxjs_1.firstValueFrom)(responseObsv);
-            console.log(response);
-            if (!response) {
-                throw new microservices_1.RpcException('Usuário ou senha inválidos');
+            const { credenciais, user } = data;
+            console.log("Credenciais", credenciais, "user", user);
+            const validateCredenciais = await argon.verify(user.senha, credenciais.senha);
+            if (!validateCredenciais) {
+                throw new microservices_1.RpcException('Credenciais inválidas');
             }
-            const isPasswordValid = await argon.verify(response.senha, data.senha);
-            if (!isPasswordValid) {
-                throw new microservices_1.RpcException('Usuário ou senha inválidos');
-            }
-            const payload = { name: response.nome, username: response.username, role: response.nivel_acesso, sub: response.id };
-            return {
-                access_token: this.jwtService.sign(payload),
-            };
+            const payload = { name: `${user.usuario.nome} ${user.usuario.sobrenome}`, username: user.username, sub: user.usuario.id, nivel_acesso: user.nivel_acesso };
+            const token = await this.jwtService.sign(payload);
+            return { token };
         }
         catch (error) {
             console.log(error);

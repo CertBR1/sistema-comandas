@@ -6,10 +6,16 @@ import { UpdateComandaDto } from './dto/update-comanda.dto';
 
 @Controller()
 export class ComandasController {
-  constructor(private readonly comandasService: ComandasService) {}
+  constructor(private readonly comandasService: ComandasService) { }
 
   @MessagePattern('createComanda')
   create(@Payload() createComandaDto: CreateComandaDto) {
+    console.log(createComandaDto)
+    return this.comandasService.create(createComandaDto);
+  }
+
+  @MessagePattern('createOneComanda')
+  createOne(@Payload() createComandaDto: CreateComandaDto) {
     return this.comandasService.create(createComandaDto);
   }
 
@@ -19,7 +25,7 @@ export class ComandasController {
   }
 
   @MessagePattern('findOneComanda')
-  findOne(@Payload() id: number) {
+  findOne(@Payload() id: string) {
     return this.comandasService.findOne(id);
   }
 

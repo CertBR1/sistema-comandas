@@ -15,12 +15,18 @@ export class UsuarioService {
   ) { }
   async login(credenciais: LoginDto) {
     try {
-      const responseObsv = this.authService.send('login', credenciais);
-      const response = await firstValueFrom(responseObsv);
-      return response
+      console.log('antes do send', credenciais);
+      const userObsv = this.databaseService.send('findbyUsername', credenciais.username);
+      const user = await firstValueFrom(userObsv);
+      console.log('depois do send', user);
+      if (user) {
+        const responseObsv = this.authService.send('login', { credenciais, user });
+        const response = await firstValueFrom(responseObsv);
+        return response;
+      }
     } catch (error) {
-      console.log(error);
-      if (error.error === 'Usuário ou senha inválidos') {
+      console.log('LOGIN', error);
+      if (error.error === 'Usuário ou senha inválidos' || error.error === 'Credenciais inválidas') {
         throw new HttpException('Usuário ou senha inválidos', HttpStatus.UNAUTHORIZED);
       }
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);

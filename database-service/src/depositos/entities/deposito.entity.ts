@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Comanda } from "../../comandas/entities/comanda.entity";
 import { Usuario } from "src/usuarios/entities/usuario.entity";
 
@@ -11,7 +11,7 @@ export class Deposito {
     comanda: Comanda;
     @Column({ nullable: false })
     valor: number;
-    @OneToOne(() => Usuario)
+    @ManyToOne(() => Usuario, usuario => usuario.depositos)
     usuario: Usuario
     @CreateDateColumn()
     createdAt: Date;
