@@ -6,6 +6,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
 import { RmqClientModule } from './rmq-client/rmq-client.module';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { ComandaModule } from './comanda/comanda.module';
 
 
 @Module({
@@ -14,7 +15,8 @@ import { AuthMiddleware } from './auth/auth.middleware';
       isGlobal: true
     }),
     UsuarioModule,
-    RmqClientModule
+    RmqClientModule,
+    ComandaModule
   ],
   controllers: [AppController],
   providers: [AppService],

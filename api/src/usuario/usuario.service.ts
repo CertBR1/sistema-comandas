@@ -1,4 +1,4 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ClientProxy } from '@nestjs/microservices';
@@ -21,9 +21,9 @@ export class UsuarioService {
     } catch (error) {
       console.log(error);
       if (error.error === 'Usuário ou senha inválidos') {
-        throw new HttpException('Usuário ou senha inválidos', 401);
+        throw new HttpException('Usuário ou senha inválidos', HttpStatus.UNAUTHORIZED);
       }
-      throw new HttpException(error, 500);
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   async create(createUsuarioDto: CreateUsuarioDto) {
@@ -33,7 +33,7 @@ export class UsuarioService {
       return response;
     } catch (error) {
       console.log(error);
-      throw new HttpException(error, 500);
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

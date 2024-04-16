@@ -33,7 +33,7 @@ export class UsuariosService {
   }
 
   findAll() {
-    return `This action returns all usuarios`;
+    throw new RpcException('Method not implemented.');
   }
 
   async findbyUsername(username: string) {
@@ -44,14 +44,19 @@ export class UsuariosService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+    try {
+      return this.usuariosRepository.findOneBy({ id });
+    } catch (error) {
+      console.log(error);
+      throw new RpcException(error);
+    }
   }
 
   update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+    throw new RpcException('Update not implemented');
   }
 
   remove(id: number) {
-    return `This action removes a #${id} usuario`;
+    throw new RpcException(`Delete not implemented`);
   }
 }

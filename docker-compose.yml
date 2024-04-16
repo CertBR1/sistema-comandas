@@ -1,5 +1,5 @@
 services:
-  database:
+  postgres-service:
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -9,6 +9,15 @@ services:
       - "5432:5432"
     expose:
       - 5432
+    networks:
+      - default
+  rabbitmq-service:
+    image: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "5672:5672"
     networks:
       - default
   database-sevice:
@@ -24,15 +33,17 @@ services:
       - database
     networks:
       - default
-  rabbitmq:
-    image: rabbitmq
+  comanda-service:
+    build: ./comanda-service
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-    ports:
-      - "5672:5672"
+      RMQ_COMANDA_QUEUE: ${RMQ_COMANDA_QUEUE}
+      RMQ_DATABASE_QUEUE: ${RMQ_DATABASE_QUEUE}
+      RMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
+    depends_on:
+      - rabbitmq
+      - database-sevice
     networks:
-      - default    
-networks:
+      - default
+networks: 
   default:
     driver: bridge

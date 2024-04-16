@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Deposito } from "../../depositos/entities/deposito.entity";
 import { Venda } from "src/vendas/entities/venda.entity";
 
@@ -9,7 +9,7 @@ export class Comanda {
     @Index({ unique: true })
     @Column()
     pin: string;
-    @Column()
+    @Column({ default: false })
     status: boolean;
     @Column({ default: 0 })
     saldo: number;
@@ -21,4 +21,8 @@ export class Comanda {
     createdAt: Date;
     @UpdateDateColumn()
     updatedAt: Date;
+    @BeforeInsert()
+    generatePin() {
+        this.pin = Math.floor(1000 + Math.random() * 9000).toString();
+    }
 }
