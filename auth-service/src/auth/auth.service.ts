@@ -15,7 +15,6 @@ export class AuthService {
   }
   async login(data: CreateAuthDto) {
     console.log(data);
-
     try {
       const responseObsv = this.databaseService.send('findbyUsername', data.username);
       const response = await firstValueFrom(responseObsv);
@@ -38,6 +37,10 @@ export class AuthService {
   }
   async decodeToken(data: string) {
     try {
+      const validateToken = this.jwtService.verify(data);
+      if (!validateToken) {
+        throw new RpcException('Token inválido');
+      }
       const payload = await this.jwtService.decode(data);
       return payload
     } catch (error) {

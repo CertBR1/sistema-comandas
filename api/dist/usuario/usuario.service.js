@@ -25,10 +25,14 @@ let UsuarioService = class UsuarioService {
         try {
             const responseObsv = this.authService.send('login', credenciais);
             const response = await (0, rxjs_1.firstValueFrom)(responseObsv);
+            console.log(response);
             return response;
         }
         catch (error) {
             console.log(error);
+            if (error.error === 'Usuário ou senha inválidos') {
+                throw new common_1.HttpException('Usuário ou senha inválidos', 401);
+            }
             throw new common_1.HttpException(error, 500);
         }
     }

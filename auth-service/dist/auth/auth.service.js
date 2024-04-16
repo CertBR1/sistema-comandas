@@ -48,6 +48,10 @@ let AuthService = class AuthService {
     }
     async decodeToken(data) {
         try {
+            const validateToken = this.jwtService.verify(data);
+            if (!validateToken) {
+                throw new microservices_1.RpcException('Token inválido');
+            }
             const payload = await this.jwtService.decode(data);
             return payload;
         }

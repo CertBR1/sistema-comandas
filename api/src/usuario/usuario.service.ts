@@ -20,6 +20,9 @@ export class UsuarioService {
       return response
     } catch (error) {
       console.log(error);
+      if (error.error === 'Usuário ou senha inválidos') {
+        throw new HttpException('Usuário ou senha inválidos', 401);
+      }
       throw new HttpException(error, 500);
     }
   }

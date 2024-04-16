@@ -3,10 +3,16 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ProdutosService } from './produtos.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
 
 @Controller()
 export class ProdutosController {
-  constructor(private readonly produtosService: ProdutosService) {}
+  constructor(private readonly produtosService: ProdutosService) { }
+
+  @MessagePattern('createCategoria')
+  createCategory(@Payload() createCategoriaDto: CreateCategoriaDto) {
+    return this.produtosService.createCategory(createCategoriaDto);
+  }
 
   @MessagePattern('createProduto')
   create(@Payload() createProdutoDto: CreateProdutoDto) {

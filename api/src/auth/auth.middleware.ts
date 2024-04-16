@@ -24,9 +24,12 @@ export class AuthMiddleware implements NestMiddleware {
         return next();
       }
     } catch (error) {
-      console.log(error);
+      console.log('error', error);
       if (error.status === 401) {
         throw new HttpException('Usuário não autenticado', 401);
+      }
+      if (error.name === 'TokenExpiredError') {
+        throw new HttpException('Token expirado', 401);
       }
       throw new HttpException(error, 500);
     }
