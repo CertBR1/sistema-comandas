@@ -13,23 +13,17 @@ export class AuthService {
   ) {
 
   }
-  async login(data: CreateAuthDto) {
-    console.log(data);
+  async login(data: any) {
     try {
-      const responseObsv = this.databaseService.send('findbyUsername', data.username);
-      const response = await firstValueFrom(responseObsv);
-      console.log(response);
-      if (!response) {
-        throw new RpcException('Usuário ou senha inválidos');
+      const { credenciais, user } = data;
+      console.log("Credenciais", credenciais, "user", user);
+      const validateCredenciais = await argon.verify(user.senha, credenciais.senha);
+      if (!validateCredenciais) {
+        throw new RpcException('Credenciais inválidas');
       }
-      const isPasswordValid = await argon.verify(response.senha, data.senha);
-      if (!isPasswordValid) {
-        throw new RpcException('Usuário ou senha inválidos');
-      }
-      const payload = { name: response.nome, username: response.username, role: response.nivel_acesso, sub: response.id };
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
+      const payload = { name: `${user.usuario.nome} ${user.usuario.sobrenome}`, username: user.username, sub: user.usuario.id, nivel_acesso: user.nivel_acesso };
+      const token = await this.jwtService.sign(payload);
+      return { token };
     } catch (error) {
       console.log(error)
       throw new RpcException(error);

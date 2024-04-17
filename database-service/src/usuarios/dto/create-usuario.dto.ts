@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { NivelAcesso } from "src/common/enums/roles-enum";
 
 class Credenciais {
     @IsNotEmpty({ message: 'Nome de usuário obrigatório' })
@@ -8,6 +9,9 @@ class Credenciais {
     @IsNotEmpty({ message: 'Senha obrigatória' })
     @IsString({ message: 'Senha deve ser uma string' })
     senha: string;
+
+    @IsEnum(NivelAcesso, { message: 'Nível de acesso inválido' })
+    nivel_acesso: NivelAcesso;
 }
 export class CreateUsuarioDto {
     @IsNotEmpty({ message: 'Nome obrigatório' })

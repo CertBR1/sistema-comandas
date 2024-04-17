@@ -16,7 +16,7 @@ import { ComandaModule } from './comanda/comanda.module';
     }),
     UsuarioModule,
     RmqClientModule,
-    ComandaModule
+    ComandaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -26,8 +26,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: '/usuario', method: RequestMethod.POST })
-      .exclude({ path: '/usuario/login', method: RequestMethod.POST })
+      .exclude({ path: '/usuario', method: RequestMethod.POST }, { path: '/usuario/login', method: RequestMethod.POST })
       .forRoutes('*');
   }
 }

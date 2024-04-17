@@ -1,11 +1,12 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateAuthDto {
-    @IsNotEmpty({ message: 'Username é obrigatorio' })
-    @IsString({ message: 'Username deve ser uma string' })
+class Credenciais {
     username: string;
-
-    @IsNotEmpty({ message: 'Senha é obrigatorio' })
-    @IsString({ message: 'Senha deve ser uma string' })
     senha: string;
+}
+export class CreateAuthDto {
+    @IsNotEmpty({ message: 'Nenhuma das credenciais pode ser vazia' })
+    credenciaisDigitadas: Credenciais;
+    @IsNotEmpty({ message: 'Nenhuma das credenciais pode ser vazia' })
+    credenciaisBancoDeDados: Credenciais;
 }

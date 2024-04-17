@@ -14,10 +14,12 @@ export class ComandasService {
   ) {
 
   }
-  create(createComandaDto: CreateComandaDto) {
+  async create(createComandaDto: CreateComandaDto) {
     try {
       const comanda = this.comandasRepository.create(createComandaDto);
-      return this.comandasRepository.save(comanda);
+      const comandaCriada = await this.comandasRepository.save(comanda);
+      console.log(comandaCriada);
+      return comandaCriada
     } catch (error) {
       console.log(error);
       if (error.code === '23505') {
@@ -30,8 +32,13 @@ export class ComandasService {
     return this.comandasRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comanda`;
+  findOne(PIN: string) {
+    try {
+      return this.comandasRepository.findOneBy({ pin: PIN });
+    } catch (error) {
+      console.log(error);
+      throw new RpcException(error);
+    }
   }
 
   update(id: number, updateComandaDto: UpdateComandaDto) {

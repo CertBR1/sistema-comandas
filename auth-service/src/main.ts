@@ -3,6 +3,11 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
+  console.log(process.env.RMQ_URL);
+  console.log(process.env.RMQ_AUTH_QUEUE);
+  console.log(process.env.RMQ_DATABASE_QUEUE);
+
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {

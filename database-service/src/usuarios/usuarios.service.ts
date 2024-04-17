@@ -18,9 +18,10 @@ export class UsuariosService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     try {
       const { nome, sobrenome, credenciais } = createUsuarioDto;
+      console.log(credenciais)
       const senhaHash = await argon.hash(credenciais.senha);
       const usuario = this.usuariosRepository.create({ nome, sobrenome });
-      const credencial = this.credenciaisRepository.create({ username: credenciais.username, senha: senhaHash, usuario });
+      const credencial = this.credenciaisRepository.create({ username: credenciais.username, senha: senhaHash, usuario, nivel_acesso: credenciais.nivel_acesso });
       const createdCredencial = await this.credenciaisRepository.save(credencial);
       usuario.credenciais = createdCredencial
       const createdUsuario = await this.usuariosRepository.save(usuario);
@@ -33,13 +34,15 @@ export class UsuariosService {
   }
 
   findAll() {
+    console.log('find all');
+
     throw new RpcException('Method not implemented.');
   }
 
   async findbyUsername(username: string) {
     console.log(username);
     const user = await this.credenciaisRepository.findOne({ where: { username }, relations: { usuario: true } });
-    console.log(user);
+    console.log('USER', user);
     return user;
   }
 
