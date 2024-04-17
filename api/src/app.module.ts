@@ -16,7 +16,7 @@ import { ComandaModule } from './comanda/comanda.module';
     }),
     UsuarioModule,
     RmqClientModule,
-    ComandaModule
+    ComandaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

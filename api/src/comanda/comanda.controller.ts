@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { ComandaService } from './comanda.service';
 import { CreateComandaDto } from './dto/create-comanda.dto';
 import { UpdateComandaDto } from './dto/update-comanda.dto';
 import { CreateDepositoDto } from './dto/create-deposito.dto';
+import { AccessLevel } from 'src/common/decorators/access-level.decorator';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('comanda')
 export class ComandaController {
@@ -23,9 +25,16 @@ export class ComandaController {
     return this.comandaService.findOne(id);
   }
 
-  @Post(':id')
-  deposit(@Param('id') id: string, @Body() createDepositoDto: CreateDepositoDto) {
-    return this.comandaService.deposit(createDepositoDto, id);
+  @Post(':id/deposito')
+  @UseGuards(AuthGuard)
+  @AccessLevel('caixa', 'admin')
+  deposit(@Param('id') PIN: string, @Body() createDepositoDto: CreateDepositoDto, @Req() body) {
+    const { authenticated } = body;
+    const deposit = new CreateDepositoDto();
+    deposit.PIN = PIN;
+    deposit.idUsuario = authenticated.sub;
+    deposit.valor = createDepositoDto.valor;
+    return this.comandaService.deposit(deposit);
   }
 
   @Patch(':id')

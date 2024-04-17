@@ -18,9 +18,10 @@ export class UsuariosService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     try {
       const { nome, sobrenome, credenciais } = createUsuarioDto;
+      console.log(credenciais)
       const senhaHash = await argon.hash(credenciais.senha);
       const usuario = this.usuariosRepository.create({ nome, sobrenome });
-      const credencial = this.credenciaisRepository.create({ username: credenciais.username, senha: senhaHash, usuario });
+      const credencial = this.credenciaisRepository.create({ username: credenciais.username, senha: senhaHash, usuario, nivel_acesso: credenciais.nivel_acesso });
       const createdCredencial = await this.credenciaisRepository.save(credencial);
       usuario.credenciais = createdCredencial
       const createdUsuario = await this.usuariosRepository.save(usuario);

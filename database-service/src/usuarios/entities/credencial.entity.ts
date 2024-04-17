@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Usuario } from "./usuario.entity";
+import { NivelAcesso } from "src/common/enums/roles-enum";
 
 @Entity({ name: 'credenciais' })
 export class Credencial {
@@ -11,8 +12,8 @@ export class Credencial {
     senha: string;
     @OneToOne(() => Usuario, (usuario) => usuario.credenciais)
     usuario: Usuario;
-    @Column({ default: 0 })
-    nivel_acesso: number;
+    @Column({ type: 'enum', enum: NivelAcesso })
+    nivel_acesso: NivelAcesso;
     @CreateDateColumn()
     createdAt: Date;
     @UpdateDateColumn()

@@ -7,18 +7,19 @@ import { CreateDepositoDto } from './dto/create-deposito.dto';
 
 @Injectable()
 export class ComandaService {
-  deposit(createDepositoDto: CreateDepositoDto, PIN: string) {
+  constructor(
+    @Inject('DATABASE_SERVICE')
+    private readonly databaseService: ClientProxy
+  ) { }
+
+  deposit(createDepositoDto: CreateDepositoDto) {
     try {
-      console.log(createDepositoDto, PIN);
+      console.log(createDepositoDto);
     } catch (error) {
 
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  constructor(
-    @Inject('DATABASE_SERVICE')
-    private readonly databaseService: ClientProxy
-  ) { }
   async create(createComandaDto: CreateComandaDto) {
     try {
       const comandaObsv = this.databaseService.send('createComanda', {});

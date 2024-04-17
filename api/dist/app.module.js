@@ -32,7 +32,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             usuario_module_1.UsuarioModule,
             rmq_client_module_1.RmqClientModule,
-            comanda_module_1.ComandaModule
+            comanda_module_1.ComandaModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
