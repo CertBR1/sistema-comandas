@@ -4,19 +4,24 @@ import { UpdateComandaDto } from './dto/update-comanda.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { CreateDepositoDto } from './dto/create-deposito.dto';
+import { response } from 'express';
 
 @Injectable()
 export class ComandaService {
   constructor(
     @Inject('DATABASE_SERVICE')
-    private readonly databaseService: ClientProxy
+    private readonly databaseService: ClientProxy,
+    @Inject('CAIXA_SERVICE')
+    private readonly caixaService: ClientProxy
   ) { }
 
-  deposit(createDepositoDto: CreateDepositoDto) {
+  async deposito(createDepositoDto: CreateDepositoDto) {
     try {
       console.log(createDepositoDto);
+      const reponseObsv = this.caixaService.send('createDeposit', createDepositoDto)
+      const reponse = await firstValueFrom(reponseObsv)
+      return reponse;
     } catch (error) {
-
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

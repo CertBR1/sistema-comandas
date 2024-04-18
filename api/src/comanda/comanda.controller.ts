@@ -34,7 +34,7 @@ export class ComandaController {
     deposit.PIN = PIN;
     deposit.idUsuario = authenticated.sub;
     deposit.valor = createDepositoDto.valor;
-    return this.comandaService.deposit(deposit);
+    return this.comandaService.deposito(deposit);
   }
 
   @Patch(':id')

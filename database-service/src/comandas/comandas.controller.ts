@@ -26,6 +26,7 @@ export class ComandasController {
 
   @MessagePattern('findOneComanda')
   findOne(@Payload() id: string) {
+    console.log(id);
     return this.comandasService.findOne(id);
   }
 

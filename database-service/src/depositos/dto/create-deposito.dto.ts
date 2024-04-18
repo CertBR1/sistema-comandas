@@ -8,9 +8,9 @@ export class CreateDepositoDto {
 
     @IsNumberString({ no_symbols: true }, { message: 'O id da comanda precisa ser um número' })
     @IsPositive({ message: 'O id da comanda precisa ser valido' })
-    comandaId: string;
+    comandaId: number;
 
     @IsNumberString({ no_symbols: true }, { message: 'O id do usuário precisa ser um número' })
     @IsPositive({ message: 'O id do usuário precisa ser valido' })
-    usuarioId: string;
+    usuarioId: number;
 }

@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { timeStamp } from 'console';
 import { NextFunction, Request, Response } from 'express';
 import { firstValueFrom, timestamp } from 'rxjs';
-import { RmqClientModule } from 'src/rmq-client/rmq-client.module';
+import { RmqClientModule } from 'src/common/rmq-client/rmq-client.module';
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(

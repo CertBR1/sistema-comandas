@@ -17,17 +17,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
                     },
                 }
             },
-            {
-                name: 'AUTH_SERVICE',
-                transport: Transport.RMQ,
-                options: {
-                    urls: [process.env.RMQ_URL],
-                    queue: process.env.RMQ_AUTH_QUEUE,
-                    queueOptions: {
-                        durable: true
-                    },
-                }
-            }
         ]),
     ],
     controllers: [],

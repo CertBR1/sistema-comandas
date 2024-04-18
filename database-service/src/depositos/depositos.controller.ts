@@ -6,10 +6,11 @@ import { UpdateDepositoDto } from './dto/update-deposito.dto';
 
 @Controller()
 export class DepositosController {
-  constructor(private readonly depositosService: DepositosService) {}
+  constructor(private readonly depositosService: DepositosService) { }
 
   @MessagePattern('createDeposito')
   create(@Payload() createDepositoDto: CreateDepositoDto) {
+    console.log(createDepositoDto);
     return this.depositosService.create(createDepositoDto);
   }
 
