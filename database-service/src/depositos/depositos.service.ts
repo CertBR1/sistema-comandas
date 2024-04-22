@@ -20,17 +20,24 @@ export class DepositosService {
   ) { }
   async create(createDepositoDto: CreateDepositoDto) {
     try {
-      const comanda = await this.comandasRepository.findOneBy({ id: createDepositoDto.comandaId });
-      const usuario = await this.usuariosRepository.findOneBy({ id: createDepositoDto.usuarioId });
-      if (!comanda || !usuario) {
-        throw new RpcException('Comanda ou Usuário não encontrado');
-      }
-      const deposito = this.depositosRepository.create({
-        valor: createDepositoDto.valor,
-        comanda: comanda,
-        usuario: usuario
+      /* comece uma transaçao usando o typeorm */
+      const transaction = await this.depositosRepository.manager.transaction(async transactionManager => {
+        const queryBuilder = transactionManager.createQueryBuilder();
+        const comanda = await queryBuilder
+          .select('comanda')
+          .from(Comanda, 'comanda')
+          .where('comanda.id = :idComanda', { idComanda: createDepositoDto.comandaId })
+          .getOne();
+        if (!comanda) {
+          throw new RpcException('Comanda não existe');
+        }
+        const deposito = new Deposito();
+        deposito.comanda = comanda;
+        deposito.valor = createDepositoDto.valor;
+        deposito.usuario = await this.usuariosRepository.findOneBy({ id: createDepositoDto.usuarioId });
+        return transactionManager.save(deposito);
       });
-      return await this.depositosRepository.save(deposito);
+      return transaction
     } catch (error) {
       console.log(error);
       throw new RpcException(error);

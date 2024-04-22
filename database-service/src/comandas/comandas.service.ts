@@ -5,21 +5,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Comanda } from './entities/comanda.entity';
 import { Repository, Transaction } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
+import { Deposito } from 'src/depositos/entities/deposito.entity';
+
 
 @Injectable()
 export class ComandasService {
   constructor(
     @InjectRepository(Comanda)
     private readonly comandasRepository: Repository<Comanda>,
+    @InjectRepository(Deposito)
+    private readonly depositosRepository: Repository<Deposito>,
   ) {
-
   }
   async create(createComandaDto: CreateComandaDto,) {
     const manager = this.comandasRepository.manager;
     try {
       const comanda = manager.create(Comanda, createComandaDto);
       const comandaCriada = await manager.save(comanda);
-      console.log(comandaCriada);
       return comandaCriada;
     } catch (error) {
       console.log(error);
@@ -28,15 +30,20 @@ export class ComandasService {
       }
       throw new RpcException(error);
     }
-
   }
   findAll() {
     return this.comandasRepository.find();
   }
 
-  findOne(PIN: string) {
+  async findOne(PIN: string) {
     try {
-      return this.comandasRepository.findOneBy({ pin: PIN });
+      const comanda = await this.comandasRepository.findOneBy({ pin: PIN });
+      if (!comanda) {
+        throw new RpcException('Comanda não existe');
+      }
+      const depositos = await this.depositosRepository.find({ where: { comanda: { id: comanda.id } } });
+      console.log(depositos)
+      return { ...comanda, depositos };
     } catch (error) {
       console.log(error);
       throw new RpcException(error);
@@ -45,10 +52,20 @@ export class ComandasService {
 
   async update(id: number, updateComandaDto: UpdateComandaDto) {
     try {
-      console.log('UPDATECOMANDA', updateComandaDto);
-
-      const updatedComanda = await this.comandasRepository.update(id, updateComandaDto);
-      return updatedComanda
+      const transaction = await this.comandasRepository.manager.transaction(async transactionManager => {
+        const queryBuilder = transactionManager.createQueryBuilder();
+        const comanda = await queryBuilder
+          .select('comanda')
+          .from(Comanda, 'comanda')
+          .where('comanda.id = :idComanda', { idComanda: id })
+          .getOne();
+        if (!comanda) {
+          throw new RpcException('Comanda não existe');
+        }
+        comanda.saldo = updateComandaDto.saldo;
+        return transactionManager.save(comanda);
+      })
+      return transaction
     } catch (error) {
       console.log(error);
       throw new RpcException(error);

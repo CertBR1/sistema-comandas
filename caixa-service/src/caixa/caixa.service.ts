@@ -13,13 +13,14 @@ export class CaixaService {
   ) { }
   async deposito(deposito: DepositoDto) {
     console.log(deposito);
-
     try {
       const comandaObsv = this.databaseService.send('findOneComanda', deposito.PIN);
       const comandaParaDeposito = await firstValueFrom(comandaObsv);
+      console.log(comandaParaDeposito);
       comandaParaDeposito.saldo = Number(comandaParaDeposito.saldo) + Number(deposito.valor);
       const updateComandaObsv = this.databaseService.send('updateComanda', comandaParaDeposito);
       const updateComanda = await firstValueFrom(updateComandaObsv);
+      console.log(updateComanda);
       const depositoObsv = this.databaseService.send('createDeposito',
         {
           valor: deposito.valor,

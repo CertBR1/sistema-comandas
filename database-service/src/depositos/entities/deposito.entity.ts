@@ -6,8 +6,7 @@ import { Usuario } from "src/usuarios/entities/usuario.entity";
 export class Deposito {
     @PrimaryGeneratedColumn()
     id: number;
-    @OneToMany(() => Comanda, comanda => comanda.depositos)
-    @JoinColumn({ name: "comandaid" })
+    @ManyToOne(() => Comanda, comanda => comanda.depositos)
     comanda: Comanda;
     @Column({ nullable: false })
     valor: number;
