@@ -6,7 +6,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Produto } from './entities/produto.entity';
 import { Repository } from 'typeorm';
-import { Categoria } from './entities/categoria.entity';
+import { Categoria } from '../categorias/entities/categoria.entity';
 
 @Injectable()
 export class ProdutosService {
@@ -16,31 +16,24 @@ export class ProdutosService {
     @InjectRepository(Categoria)
     private readonly categoriasRepository: Repository<Categoria>,
   ) { }
-  createCategory(createCategoriaDto: CreateCategoriaDto) {
-    try {
-      const categoria = this.categoriasRepository.create(createCategoriaDto);
-      return this.categoriasRepository.save(categoria);
-    } catch (error) {
-      console.log(error);
-      if (error.code === '23505') {
-        throw new RpcException('Categoria já existe');
-      }
-      throw new RpcException(error);
-    }
-  }
   async create(createProdutoDto: CreateProdutoDto) {
     try {
+      console.log(createProdutoDto);
+
       const { categoria, ...rest } = createProdutoDto;
       const selectedCategoria = await this.categoriasRepository.findOneBy({ id: categoria });
-      const produto = this.produtosRepository.create({ ...rest, categoria: selectedCategoria });
-      return this.produtosRepository.save(produto);
+      const produto = await this.produtosRepository.create({ ...rest, categoria: selectedCategoria });
+      return await this.produtosRepository.save(produto);
     } catch (error) {
-      console.log(error);
+      console.log('=>>>>>>>>', error);
       if (error.code === '23505') {
-        throw new RpcException('Produto já existe');
+        {
+          throw new RpcException('Produto já existe');
+        }
       }
       throw new RpcException(error);
     }
+
   }
 
   findAll() {

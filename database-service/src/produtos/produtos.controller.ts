@@ -9,11 +9,6 @@ import { CreateCategoriaDto } from './dto/create-categoria.dto';
 export class ProdutosController {
   constructor(private readonly produtosService: ProdutosService) { }
 
-  @MessagePattern('createCategoria')
-  createCategory(@Payload() createCategoriaDto: CreateCategoriaDto) {
-    return this.produtosService.createCategory(createCategoriaDto);
-  }
-
   @MessagePattern('createProduto')
   create(@Payload() createProdutoDto: CreateProdutoDto) {
     return this.produtosService.create(createProdutoDto);

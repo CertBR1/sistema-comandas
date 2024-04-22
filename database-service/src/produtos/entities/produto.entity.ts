@@ -1,7 +1,7 @@
 import { VendaProduto } from "src/vendas-produtos/entities/vendas-produto.entity";
 import { Venda } from "src/vendas/entities/venda.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Categoria } from "./categoria.entity";
+import { Categoria } from "../../categorias/entities/categoria.entity";
 
 @Entity({ name: "produtos" })
 export class Produto {
