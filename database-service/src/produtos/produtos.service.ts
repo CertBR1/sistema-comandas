@@ -35,7 +35,6 @@ export class ProdutosService {
     }
 
   }
-
   findAll() {
     try {
       return this.produtosRepository.find({

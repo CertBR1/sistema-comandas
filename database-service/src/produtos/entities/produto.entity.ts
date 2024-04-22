@@ -13,8 +13,8 @@ export class Produto {
     valor: number;
     @OneToMany(() => VendaProduto, vendaProduto => vendaProduto.produto)
     vendaProdutos: VendaProduto[];
-    @OneToOne(() => Categoria)
-    @JoinColumn()
+    @ManyToOne(() => Categoria, categoria => categoria.produtos)
+    @JoinColumn({ name: 'categoriaId' })
     categoria: Categoria;
     @CreateDateColumn()
     createdAt: Date;
