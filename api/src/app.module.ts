@@ -9,6 +9,7 @@ import { ComandaModule } from './comanda/comanda.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { ProdutoModule } from './produto/produto.module';
 import { VendaModule } from './venda/venda.module';
+import { LoggerModule } from 'nestjs-pino';
 
 
 
@@ -17,6 +18,7 @@ import { VendaModule } from './venda/venda.module';
     ConfigModule.forRoot({
       isGlobal: true
     }),
+    LoggerModule.forRoot(),
     UsuarioModule,
     RmqClientModule,
     ComandaModule,
