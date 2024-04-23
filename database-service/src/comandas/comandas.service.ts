@@ -17,6 +17,14 @@ export class ComandasService {
     private readonly depositosRepository: Repository<Deposito>,
   ) {
   }
+  findOneWithoutDepositos(pin: string) {
+    try {
+      return this.comandasRepository.findOneBy({ pin: pin });
+    } catch (error) {
+      console.log(error);
+      throw new RpcException(error);
+    }
+  }
   async create(createComandaDto: CreateComandaDto,) {
     const manager = this.comandasRepository.manager;
     try {

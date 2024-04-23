@@ -1,11 +1,14 @@
+import { IsNumber, IsNumberString } from "class-validator";
+
 class Produto {
     id: number;
     quantidade: number;
 }
 
 export class VendaDto {
-    id: number;
+    @IsNumberString({ no_symbols: true }, { message: 'Comanda inválida' })
     comanda: number;
-    valor_total: number;
+    @IsNumber()
+    usuarioId: number;
     produtos?: Produto[]
 }

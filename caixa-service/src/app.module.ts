@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    CaixaModule
+    CaixaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

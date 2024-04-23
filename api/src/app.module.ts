@@ -8,6 +8,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { ComandaModule } from './comanda/comanda.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { ProdutoModule } from './produto/produto.module';
+import { VendaModule } from './venda/venda.module';
 
 
 
@@ -21,6 +22,7 @@ import { ProdutoModule } from './produto/produto.module';
     ComandaModule,
     CategoriaModule,
     ProdutoModule,
+    VendaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

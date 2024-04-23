@@ -30,6 +30,13 @@ export class ComandasController {
     return this.comandasService.findOne(id);
   }
 
+  @MessagePattern('findOneComandaWithoutDepositos')
+  findOneWithoutDepositos(@Payload() id: string) {
+    console.log(id);
+    return this.comandasService.findOneWithoutDepositos(id);
+  }
+
+
   @MessagePattern('updateComanda')
   update(@Payload() updateComandaDto: UpdateComandaDto) {
     return this.comandasService.update(updateComandaDto.id, updateComandaDto);
