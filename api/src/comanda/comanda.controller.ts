@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, Query, HttpStatus, HttpException } from '@nestjs/common';
 import { ComandaService } from './comanda.service';
 import { CreateComandaDto } from './dto/create-comanda.dto';
 import { UpdateComandaDto } from './dto/update-comanda.dto';
@@ -11,7 +11,18 @@ export class ComandaController {
   constructor(private readonly comandaService: ComandaService) { }
 
   @Post()
-  create(@Body() createComandaDto: CreateComandaDto) {
+  async create(@Body() createComandaDto: CreateComandaDto, @Query() query) {
+    if (query.quantidade) {
+      console.log('quantidade', query.quantidade);
+      if (query.quantidade < 1 || query.quantidade > 10) {
+        throw new HttpException('Quantidade inválida', HttpStatus.BAD_REQUEST);
+      }
+      let comandasCriadas = [];
+      for (let i = 0; i < query.quantidade; i++) {
+        comandasCriadas.push(await this.comandaService.create(createComandaDto));
+      }
+      return comandasCriadas
+    }
     return this.comandaService.create(createComandaDto);
   }
 

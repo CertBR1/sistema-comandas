@@ -14,6 +14,9 @@ export class AuthMiddleware implements NestMiddleware {
     Logger.log('Middleware: ', timeStamp());
     try {
       const auth = req.headers.authorization;
+      if (!auth) {
+        throw new HttpException('Usuário não autenticado', 401);
+      }
       const token = auth.split(' ')[1];
       const responseObsv = this.authService.send('decodeToken', token);
       const response = await firstValueFrom(responseObsv);

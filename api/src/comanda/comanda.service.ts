@@ -40,15 +40,22 @@ export class ComandaService {
     }
   }
 
-  findAll() {
-    return `This action returns all comanda`;
+  async findAll() {
+    try {
+      const comandas = await firstValueFrom(this.databaseService.send('findAllComandas', {}));
+      return comandas
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   findOne(PIN: string) {
     try {
       return this.databaseService.send('findOneComanda', PIN);
     } catch (error) {
-
+      console.log(error);
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

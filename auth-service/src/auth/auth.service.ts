@@ -13,6 +13,19 @@ export class AuthService {
   ) {
 
   }
+  validateToken(token: string) {
+    try {
+      console.log(token);
+      const validateToken = this.jwtService.verify(token);
+      if (!validateToken) {
+        return false
+      } else {
+        return true
+      }
+    } catch (error) {
+      throw new RpcException(error);
+    }
+  }
   async login(data: any) {
     try {
       const { credenciais, user } = data;

@@ -6,6 +6,7 @@ import { Comanda } from './entities/comanda.entity';
 import { Repository, Transaction } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 import { Deposito } from 'src/depositos/entities/deposito.entity';
+import { Venda } from 'src/vendas/entities/venda.entity';
 
 
 @Injectable()
@@ -45,13 +46,11 @@ export class ComandasService {
 
   async findOne(PIN: string) {
     try {
-      const comanda = await this.comandasRepository.findOneBy({ pin: PIN });
+      const comanda = await this.comandasRepository.findOne({ where: { pin: PIN }, relations: ['depositos', 'vendas'] });
       if (!comanda) {
         throw new RpcException('Comanda não existe');
       }
-      const depositos = await this.depositosRepository.find({ where: { comanda: { id: comanda.id } } });
-      console.log(depositos)
-      return { ...comanda, depositos };
+      return comanda;
     } catch (error) {
       console.log(error);
       throw new RpcException(error);

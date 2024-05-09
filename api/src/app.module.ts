@@ -10,6 +10,8 @@ import { CategoriaModule } from './categoria/categoria.module';
 import { ProdutoModule } from './produto/produto.module';
 import { VendaModule } from './venda/venda.module';
 import { LoggerModule } from 'nestjs-pino';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -25,6 +27,7 @@ import { LoggerModule } from 'nestjs-pino';
     CategoriaModule,
     ProdutoModule,
     VendaModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -34,7 +37,11 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: '/usuario', method: RequestMethod.POST }, { path: '/usuario/login', method: RequestMethod.POST })
+      .exclude(
+        { path: '/usuario', method: RequestMethod.POST },
+        { path: '/usuario/login', method: RequestMethod.POST },
+        { path: '/auth/validatetoken', method: RequestMethod.POST }
+      )
       .forRoutes('*');
   }
 }

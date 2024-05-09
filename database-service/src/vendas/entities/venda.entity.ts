@@ -8,7 +8,6 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, On
 export class Venda {
     @PrimaryGeneratedColumn()
     id: number;
-
     @ManyToOne(() => Comanda, comanda => comanda.vendas)
     comanda: Comanda;
     @Column({ nullable: false })

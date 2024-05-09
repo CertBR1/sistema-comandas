@@ -17,4 +17,9 @@ export class AuthController {
   decodeToken(@Payload() data: string) {
     return this.authService.decodeToken(data);
   }
+
+  @MessagePattern('validateToken')
+  validateToken(@Payload() token: string) {
+    return this.authService.validateToken(token);
+  }
 }
